@@ -33,6 +33,12 @@ Open `index.html` in a browser. Paste your small list and big list into the two 
 4. **Secret Santa / gift exchange** — pair participants with people to buy gifts for
 5. **Project ideas** — pair students or teams with topics/projects to work on
 
+## To Do
+
+- [ ] Add an 'R6' button in the top right of the web app that loads a preset wheel: small list autofilled from `example_small-lists/team.txt`, big list autofilled from `example_big-lists/r6_attackers.txt`, with a toggle to switch the big list to `example_big-lists/r6_defenders.txt`
+- [ ] Add a 'Bans' list on the right-hand side of the R6 wheel, allowing certain operators to be removed from the attackers/defenders list before spinning
+- [ ] Add thumbnails for the operators chosen in the final pairing and in the bans list
+
 ## Tests
 
 Run the test suite with:
