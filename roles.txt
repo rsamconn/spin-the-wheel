@@ -1,0 +1,6 @@
+Scrum Master
+Note Taker
+Timekeeper
+QA Lead
+Demo Presenter
+Backlog Groomer
