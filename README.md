@@ -1,8 +1,8 @@
 # Spin the Wheel
 
-A small command-line tool that randomly pairs each item from a smaller list with a unique item from a larger list, without replacement.
+A small tool that randomly pairs each item from a smaller list with a unique item from a larger list, without replacement. Available as a command-line script or a simple interactive web app.
 
-## Usage
+## Command-line usage
 
 ```
 python3 wheel.py <small_list_file> <large_list_file>
@@ -13,8 +13,17 @@ Each file should contain one item per line. The large list must have at least as
 Example:
 
 ```
-python3 wheel.py names.txt roles.txt
+python3 wheel.py example_small-lists/names.txt example_big-lists/roles.txt
 ```
+
+## Web app
+
+Open `index.html` in a browser. Paste your small list and big list into the two boxes (one item per line) and click **Spin!** to see the pairings.
+
+## Example lists
+
+- `example_small-lists/` — example "small list" files, e.g. names of people or teams
+- `example_big-lists/` — example "big list" files, e.g. roles, positions, or states to be paired with the small list
 
 ## Example use cases
 

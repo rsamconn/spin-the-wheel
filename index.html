@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spin the Wheel</title>
+<style>
+  body {
+    font-family: system-ui, sans-serif;
+    background: #f4f4f8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+  }
+  h1 {
+    margin-bottom: 30px;
+  }
+  .container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .box {
+    display: flex;
+    flex-direction: column;
+  }
+  .box label {
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  textarea {
+    width: 250px;
+    height: 200px;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    resize: vertical;
+  }
+  #spin-btn {
+    font-size: 18px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    background: #4f46e5;
+    color: white;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+  }
+  #spin-btn:hover:not(:disabled) {
+    background: #4338ca;
+  }
+  #spin-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+  #spin-btn.spinning {
+    animation: spin 0.6s linear infinite;
+  }
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  #results {
+    margin-top: 30px;
+    max-width: 600px;
+    width: 100%;
+  }
+  #results table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  }
+  #results th, #results td {
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+  }
+  #results th {
+    background: #4f46e5;
+    color: white;
+  }
+  #reset-btn {
+    margin-top: 16px;
+    padding: 8px 16px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: white;
+    cursor: pointer;
+  }
+  .error {
+    color: #b91c1c;
+    margin-top: 12px;
+  }
+</style>
+</head>
+<body>
+<h1>Spin the Wheel</h1>
+
+<div class="container" id="input-area">
+  <div class="box">
+    <label for="small-list">Small list</label>
+    <textarea id="small-list" placeholder="One item per line, e.g.&#10;Alice&#10;Bob&#10;Carol"></textarea>
+  </div>
+
+  <button id="spin-btn">Spin!</button>
+
+  <div class="box">
+    <label for="big-list">Big list</label>
+    <textarea id="big-list" placeholder="One item per line, e.g.&#10;Scrum Master&#10;Note Taker&#10;Timekeeper&#10;QA Lead"></textarea>
+  </div>
+</div>
+
+<div class="error" id="error-msg"></div>
+
+<div id="results" style="display:none;"></div>
+
+<script>
+const smallList = document.getElementById('small-list');
+const bigList = document.getElementById('big-list');
+const spinBtn = document.getElementById('spin-btn');
+const inputArea = document.getElementById('input-area');
+const results = document.getElementById('results');
+const errorMsg = document.getElementById('error-msg');
+
+function parseLines(text) {
+  return text.split('\n').map(s => s.trim()).filter(s => s.length > 0);
+}
+
+function shuffle(array) {
+  const arr = array.slice();
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+spinBtn.addEventListener('click', () => {
+  const small = parseLines(smallList.value);
+  const big = parseLines(bigList.value);
+
+  errorMsg.textContent = '';
+
+  if (small.length === 0 || big.length === 0) {
+    errorMsg.textContent = 'Please fill in both lists.';
+    return;
+  }
+  if (big.length < small.length) {
+    errorMsg.textContent = 'The big list must have at least as many items as the small list.';
+    return;
+  }
+
+  spinBtn.disabled = true;
+  spinBtn.classList.add('spinning');
+
+  setTimeout(() => {
+    const shuffledBig = shuffle(big);
+    const pairs = small.map((item, i) => [item, shuffledBig[i]]);
+
+    inputArea.style.display = 'none';
+    errorMsg.textContent = '';
+
+    let html = '<table><tr><th>Small list</th><th>Big list</th></tr>';
+    for (const [a, b] of pairs) {
+      html += `<tr><td>${escapeHtml(a)}</td><td>${escapeHtml(b)}</td></tr>`;
+    }
+    html += '</table>';
+    html += '<button id="reset-btn">Start over</button>';
+
+    results.innerHTML = html;
+    results.style.display = 'block';
+
+    document.getElementById('reset-btn').addEventListener('click', () => {
+      results.style.display = 'none';
+      inputArea.style.display = 'flex';
+      spinBtn.disabled = false;
+      spinBtn.classList.remove('spinning');
+    });
+  }, 800);
+});
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+</script>
+</body>
+</html>
