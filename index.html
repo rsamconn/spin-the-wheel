@@ -139,6 +139,9 @@
     cursor: pointer;
     margin-left: 8px;
   }
+  body.r6-mode #big-list {
+    height: 168px;
+  }
   .toggle-row {
     margin-top: 8px;
     font-size: 14px;
@@ -157,14 +160,14 @@
 
 <div class="container" id="input-area">
   <div class="box">
-    <label for="small-list">Small list</label>
+    <label for="small-list" id="small-list-label">Small list</label>
     <textarea id="small-list" placeholder="One item per line, e.g.&#10;Alice&#10;Bob&#10;Carol"></textarea>
   </div>
 
   <button id="spin-btn">Spin!</button>
 
   <div class="box">
-    <label for="big-list">Big list</label>
+    <label for="big-list" id="big-list-label">Big list</label>
     <textarea id="big-list" placeholder="One item per line, e.g.&#10;Scrum Master&#10;Note Taker&#10;Timekeeper&#10;QA Lead"></textarea>
     <div class="toggle-row" id="r6-toggle" style="display:none;">
       <label><input type="radio" name="r6-side" value="attackers" checked> Attackers</label>
@@ -205,6 +208,8 @@ function setR6Mode(active) {
   document.body.classList.toggle('r6-mode', r6Active);
   r6Toggle.style.display = r6Active ? 'flex' : 'none';
   r6ExitBtn.style.display = r6Active ? 'inline-block' : 'none';
+  document.getElementById('small-list-label').textContent = r6Active ? 'Players' : 'Small list';
+  document.getElementById('big-list-label').textContent = r6Active ? 'Operators' : 'Big list';
   if (r6Active) {
     smallList.value = R6_TEAM.join('\n');
     applyR6Side();
