@@ -36,6 +36,7 @@ Open `index.html` in a browser. Paste your small list and big list into the two 
 ## To Do
 
 - [x] Add an 'R6' button in the top right of the web app that loads a preset wheel: small list autofilled from `example_small-lists/team.txt`, big list autofilled from `example_big-lists/r6_attackers.txt`, with a toggle to switch the big list to `example_big-lists/r6_defenders.txt`
+- [ ] Sometimes the thumbnails fail to load - you can spin the wheel, it gives an answer but a few or all of the thumbnails fail to appear. When respinning with the same set of answers, the graphics may only load on the third or fourth spin.
 - [ ] Add a 'Bans' list on the right-hand side of the R6 wheel, allowing certain operators to be removed from the attackers/defenders list before spinning
 - [x] Add thumbnails for the operators chosen in the final pairing (bans list thumbnails still pending bans feature)
 - [ ] Add screenshots of R6 font, colours and style from their website for the wheel to imitate.
