@@ -139,15 +139,29 @@
     cursor: pointer;
     margin-left: 8px;
   }
-  body.r6-mode #big-list {
-    height: 168px;
-  }
-  .toggle-row {
-    margin-top: 8px;
-    font-size: 14px;
+  .box-header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .toggle-row {
+    display: flex;
     gap: 6px;
+  }
+  .toggle-row .toggle-option {
+    font-size: 13px;
+    padding: 4px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    cursor: pointer;
+    background: white;
+    user-select: none;
+  }
+  .toggle-row .toggle-option.selected {
+    background: #000;
+    color: #e30613;
+    border-color: #e30613;
   }
 </style>
 </head>
@@ -160,19 +174,23 @@
 
 <div class="container" id="input-area">
   <div class="box">
-    <label for="small-list" id="small-list-label">Small list</label>
+    <div class="box-header">
+      <label for="small-list" id="small-list-label">Small list</label>
+    </div>
     <textarea id="small-list" placeholder="One item per line, e.g.&#10;Alice&#10;Bob&#10;Carol"></textarea>
   </div>
 
   <button id="spin-btn">Spin!</button>
 
   <div class="box">
-    <label for="big-list" id="big-list-label">Big list</label>
-    <textarea id="big-list" placeholder="One item per line, e.g.&#10;Scrum Master&#10;Note Taker&#10;Timekeeper&#10;QA Lead"></textarea>
-    <div class="toggle-row" id="r6-toggle" style="display:none;">
-      <label><input type="radio" name="r6-side" value="attackers" checked> Attackers</label>
-      <label><input type="radio" name="r6-side" value="defenders"> Defenders</label>
+    <div class="box-header">
+      <label for="big-list" id="big-list-label">Big list</label>
+      <div class="toggle-row" id="r6-toggle" style="display:none;">
+        <div class="toggle-option selected" data-side="attackers">Attackers</div>
+        <div class="toggle-option" data-side="defenders">Defenders</div>
+      </div>
     </div>
+    <textarea id="big-list" placeholder="One item per line, e.g.&#10;Scrum Master&#10;Note Taker&#10;Timekeeper&#10;QA Lead"></textarea>
   </div>
 </div>
 
@@ -197,8 +215,7 @@ const R6_DEFENDERS = ["Snake","Smoke","Mute","Castle","Pulse","Doc","Rook","Kapk
 
 let r6Active = false;
 
-function applyR6Side() {
-  const side = document.querySelector('input[name="r6-side"]:checked').value;
+function applyR6Side(side) {
   bigList.value = (side === 'attackers' ? R6_ATTACKERS : R6_DEFENDERS).join('\n');
 }
 
@@ -212,7 +229,9 @@ function setR6Mode(active) {
   document.getElementById('big-list-label').textContent = r6Active ? 'Operators' : 'Big list';
   if (r6Active) {
     smallList.value = R6_TEAM.join('\n');
-    applyR6Side();
+    document.querySelectorAll('.toggle-row .toggle-option').forEach(o => o.classList.remove('selected'));
+    document.querySelector('.toggle-row .toggle-option[data-side="attackers"]').classList.add('selected');
+    applyR6Side('attackers');
   } else {
     smallList.value = '';
     bigList.value = '';
@@ -222,8 +241,12 @@ function setR6Mode(active) {
 r6Btn.addEventListener('click', () => setR6Mode(!r6Active));
 r6ExitBtn.addEventListener('click', () => setR6Mode(false));
 
-document.querySelectorAll('input[name="r6-side"]').forEach(radio => {
-  radio.addEventListener('change', applyR6Side);
+document.querySelectorAll('.toggle-row .toggle-option').forEach(opt => {
+  opt.addEventListener('click', () => {
+    document.querySelectorAll('.toggle-row .toggle-option').forEach(o => o.classList.remove('selected'));
+    opt.classList.add('selected');
+    applyR6Side(opt.dataset.side);
+  });
 });
 
 function parseLines(text) {
