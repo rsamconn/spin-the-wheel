@@ -196,7 +196,7 @@
         <div class="toggle-option" data-side="defenders">Defenders</div>
       </div>
     </div>
-    <textarea id="big-list" placeholder="One item per line, e.g.&#10;Scrum Master&#10;Note Taker&#10;Timekeeper&#10;QA Lead"></textarea>
+    <textarea id="big-list" placeholder="One item per line, e.g.&#10;Goalie&#10;Defender&#10;Set-piece coach&#10;Assistant to the Regional Manager&#10;Etc."></textarea>
   </div>
 </div>
 
@@ -292,7 +292,7 @@ spinBtn.addEventListener('click', () => {
     return;
   }
   if (big.length < small.length) {
-    errorMsg.textContent = 'The big list must have at least as many items as the small list.';
+    errorMsg.textContent = 'The list on the right must have at least as many items as the list on the left.';
     return;
   }
 
