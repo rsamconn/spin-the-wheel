@@ -77,6 +77,12 @@
     overflow: hidden;
     box-shadow: 0 1px 4px rgba(0,0,0,0.1);
   }
+  .op-icon {
+    width: 28px;
+    height: 28px;
+    vertical-align: middle;
+    margin-right: 8px;
+  }
   #results th, #results td {
     padding: 10px 14px;
     text-align: left;
@@ -213,6 +219,19 @@ const R6_TEAM = ["Charlie","James","Jamie","Matt","Rupert"];
 const R6_ATTACKERS = ["Sledge","Thatcher","Ash","Thermite","Twitch","Montagne","Glaz","Fuze","Blitz","IQ","Buck","Blackbeard","Capitão","Hibana","Jackal","Ying","Zofia","Dokkaebi","Lion","Finka","Maverick","Nomad","Gridlock","Nøkk","Amaru","Kali","Iana","Ace","Zero","Flores","Osa","Sens","Grim","Brava","Ram","Deimos","Striker","Rauora"];
 const R6_DEFENDERS = ["Snake","Smoke","Mute","Castle","Pulse","Doc","Rook","Kapkan","Tachanka","Jäger","Bandit","Frost","Valkyrie","Caveira","Echo","Mira","Lesion","Ela","Vigil","Maestro","Alibi","Clash","Kaid","Mozzie","Warden","Goyo","Wamai","Oryx","Melusi","Aruni","Thunderbird","Thorn","Azami","Solis","Fenrir","Tubarão","Sentry","Skopós","Denari"];
 
+const R6_ICON_OVERRIDES = {
+  "Capitão": "capitao",
+  "Nøkk": "nokk",
+  "Jäger": "jager",
+  "Tubarão": "tubarao",
+  "Skopós": "skopos",
+};
+
+function operatorIconPath(name) {
+  const slug = R6_ICON_OVERRIDES[name] || name.toLowerCase();
+  return `assets/r6-operators/${slug}.svg`;
+}
+
 let r6Active = false;
 
 function applyR6Side(side) {
@@ -291,7 +310,10 @@ spinBtn.addEventListener('click', () => {
     const bigTitle = r6Active ? 'Operators' : 'Big list';
     let html = `<table><tr><th>${smallTitle}</th><th>${bigTitle}</th></tr>`;
     for (const [a, b] of pairs) {
-      html += `<tr><td>${escapeHtml(a)}</td><td>${escapeHtml(b)}</td></tr>`;
+      const bCell = r6Active
+        ? `<img class="op-icon" src="${operatorIconPath(b)}" alt="${escapeHtml(b)}" onerror="this.style.display='none'">${escapeHtml(b)}`
+        : escapeHtml(b);
+      html += `<tr><td>${escapeHtml(a)}</td><td>${bCell}</td></tr>`;
     }
     html += '</table>';
     html += '<button id="reset-btn">Start over</button>';
